@@ -7,7 +7,6 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,7 +64,7 @@ class _HomeState extends State<Home> {
                     fontSize: 23), //<-- SEE HERE
               ),
               // SizedBox(
-              //   width: 10,
+              //   width: 20,
               // ),
               Image.asset(
                 'assets/images/My_project.png',
