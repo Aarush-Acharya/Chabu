@@ -1,39 +1,61 @@
 import 'dart:html';
-
+import 'dart:ui';
+import 'package:flutter/gestures.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class CustomMessage extends StatelessWidget {
   final payload;
-
   const CustomMessage({super.key, required this.payload});
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: payload['richContent']['type'].toString() == 'description'
-          ? Container(
-              color: Colors.amber,
-              child: Column(
-                children: [
-                  Text(payload['richContent']['text'][0].toString()),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  Text(payload['richContent']['text'][1].toString()),
-                ],
-              ),
-            )
-          : Container(
-              color: Colors.green,
-              child: Column(
-                children: [
-                  Text("Image is here"),
-                  Image.network(payload['richContent']['rawUrl'].toString()),
-                  Text("Can you see the Image ?")
-                ],
-              ),
-            ),
-    );
+        child: payload['richContent']['type'].toString() == 'description'
+            ? Container(
+                color: Colors.amber,
+                child: Column(
+                  children: [
+                    Text(payload['richContent']['text'][0].toString()),
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(payload['richContent']['text'][1].toString()),
+                  ],
+                ),
+              )
+            : payload['richContent']['type'].toString() == 'image'
+                ? Container(
+                    color: Colors.green,
+                    child: Column(
+                      children: [
+                        Text("Image is here"),
+                        Image.network(
+                            payload['richContent']['rawUrl'].toString()),
+                        Text("Can you see the Image ?")
+                      ],
+                    ),
+                  )
+                : Container(
+                    child: Column(
+                      children: [
+                        RichText(
+                            text: TextSpan(children: [
+                          TextSpan(
+                              text: "Here you go ",
+                              style: TextStyle(color: Colors.white)),
+                          TextSpan(
+                              style: TextStyle(color: Colors.blue),
+                              text: " Click Here ",
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  launchUrl(Uri.parse(
+                                      payload['richContent']['link']));
+                                })
+                        ]))
+                      ],
+                    ),
+                  ));
   }
 }
 
