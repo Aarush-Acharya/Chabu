@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:ui';
+import 'main.dart';
 import 'package:flutter/gestures.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
@@ -59,34 +60,49 @@ class CustomMessage extends StatelessWidget {
                           ],
                         ),
                       )
-                    : Container(
-                        child: Column(
-                          children: [
-                            Image.network(payload['Image'].toString()),
-                            SizedBox(
-                              height: 30,
+                    : payload['type'].toString() == 'Image/Link'
+                        ? Container(
+                            child: Column(
+                              children: [
+                                Image.network(payload['Image'].toString()),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(payload['Message']),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      text: "For More Information ",
+                                      style: TextStyle(color: Colors.white)),
+                                  TextSpan(
+                                      style: TextStyle(color: Colors.blue),
+                                      text: " Click Here ",
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          launchUrl(Uri.parse(payload['link']));
+                                        })
+                                ]))
+                              ],
                             ),
-                            Text(payload['Message']),
-                            SizedBox(
-                              height: 30,
-                            ),
-                            RichText(
-                                text: TextSpan(children: [
-                              TextSpan(
-                                  text: "For More Information ",
-                                  style: TextStyle(color: Colors.white)),
-                              TextSpan(
-                                  style: TextStyle(color: Colors.blue),
-                                  text: " Click Here ",
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      launchUrl(Uri.parse(payload['link']));
-                                    })
-                            ]))
-                          ],
-                        ),
-                      )
-                      );
+                          )
+                        : Container(
+                            child: Column(children: [
+                            Text(" Some suggestions are"),
+                            // RichText(
+                            //     text: TextSpan(children: [
+                            //   TextSpan(
+                            //       style: TextStyle(color: Colors.blue),
+                            //       text: " google? ",
+                            //       recognizer: TapGestureRecognizer()
+                            //         ..onTap = () {
+                            //           sendMessage(" google? ");
+                            //         }),
+                            // ])),
+                          ]))
+                          );
   }
 }
 

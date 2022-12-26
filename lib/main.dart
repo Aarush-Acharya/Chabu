@@ -126,7 +126,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  sendMessage(String text) async {
+sendMessage(String text) async {
     if (text.isEmpty) {
       print('Message is Empty');
     } else {
