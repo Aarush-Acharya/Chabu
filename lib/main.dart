@@ -63,9 +63,6 @@ class _HomeState extends State<Home> {
                     fontFamily: 'RubikVinyl',
                     fontSize: 23), //<-- SEE HERE
               ),
-              // SizedBox(
-              //   width: 20,
-              // ),
               Image.asset(
                 'assets/images/My_project.png',
                 scale: 4,

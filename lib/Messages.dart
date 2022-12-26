@@ -11,51 +11,82 @@ class CustomMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: payload['richContent']['type'].toString() == 'description'
+        child: payload['type'].toString() == 'description'
             ? Container(
                 color: Colors.amber,
                 child: Column(
                   children: [
-                    Text(payload['richContent']['text'][0].toString()),
+                    Text(payload['text'][0].toString()),
                     SizedBox(
                       height: 30,
                     ),
-                    Text(payload['richContent']['text'][1].toString()),
+                    Text(payload['text'][1].toString()),
                   ],
                 ),
               )
-            : payload['richContent']['type'].toString() == 'image'
+            : payload['type'].toString() == 'image'
                 ? Container(
                     color: Colors.green,
                     child: Column(
                       children: [
                         Text("Image is here"),
-                        Image.network(
-                            payload['richContent']['rawUrl'].toString()),
+                        Image.network(payload['rawUrl'].toString()),
                         Text("Can you see the Image ?")
                       ],
                     ),
                   )
-                : Container(
-                    child: Column(
-                      children: [
-                        RichText(
-                            text: TextSpan(children: [
-                          TextSpan(
-                              text: "Here you go ",
-                              style: TextStyle(color: Colors.white)),
-                          TextSpan(
-                              style: TextStyle(color: Colors.blue),
-                              text: " Click Here ",
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  launchUrl(Uri.parse(
-                                      payload['richContent']['link']));
-                                })
-                        ]))
-                      ],
-                    ),
-                  ));
+                : payload['type'].toString() == 'link'
+                    ? Container(
+                        child: Column(
+                          children: [
+                            Text(payload['Message']),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: "For More Information ",
+                                  style: TextStyle(color: Colors.white)),
+                              TextSpan(
+                                  style: TextStyle(color: Colors.blue),
+                                  text: " Click Here ",
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launchUrl(Uri.parse(payload['link']));
+                                    })
+                            ]))
+                          ],
+                        ),
+                      )
+                    : Container(
+                        child: Column(
+                          children: [
+                            Image.network(payload['Image'].toString()),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(payload['Message']),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            RichText(
+                                text: TextSpan(children: [
+                              TextSpan(
+                                  text: "For More Information ",
+                                  style: TextStyle(color: Colors.white)),
+                              TextSpan(
+                                  style: TextStyle(color: Colors.blue),
+                                  text: " Click Here ",
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      launchUrl(Uri.parse(payload['link']));
+                                    })
+                            ]))
+                          ],
+                        ),
+                      )
+                      );
   }
 }
 
