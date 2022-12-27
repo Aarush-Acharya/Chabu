@@ -1,19 +1,23 @@
 import 'package:dialog_flowtter/dialog_flowtter.dart';
 import "package:flutter/material.dart";
+import 'package:get/get.dart';
 import 'Messages.dart';
+import 'controllers/sendMessageController.dart';
 import 'Splash_page.dart';
+import 'bindings/initial_bindings.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Chabu',
       theme: ThemeData(brightness: Brightness.dark),
       home: SplashScreen(),
+      initialBinding: InitialBinding(),
     );
   }
 }
@@ -26,16 +30,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late DialogFlowtter dialogFlowtter;
   final TextEditingController _controller = TextEditingController();
-
-  List<Map<String, dynamic>> messages = [];
-
-  @override
-  void initState() {
-    DialogFlowtter.fromFile().then((instance) => dialogFlowtter = instance);
-    super.initState();
-  }
+  var controller = Get.find<HomePageController>();
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +80,7 @@ class _HomeState extends State<Home> {
       body: Container(
         child: Column(
           children: [
-            Expanded(child: MessagesScreen(messages: messages)),
+            Expanded(child: MessagesScreen()),
             Container(
               decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -107,13 +103,13 @@ class _HomeState extends State<Home> {
                     style: TextStyle(color: Colors.white),
                     textInputAction: TextInputAction.go,
                     onSubmitted: (value) {
-                      sendMessage(_controller.text);
+                      controller.sendMessage(_controller.text);
                       _controller.clear();
                     },
                   )),
                   IconButton(
                       onPressed: () {
-                        sendMessage(_controller.text);
+                        controller.sendMessage(_controller.text);
                         _controller.clear();
                       },
                       icon: Icon(Icons.send))
@@ -124,29 +120,5 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
-  }
-
-sendMessage(String text) async {
-    if (text.isEmpty) {
-      print('Message is Empty');
-    } else {
-      setState(() {
-        addMessage(Message(text: DialogText(text: [text])), true);
-      });
-
-      DetectIntentResponse response = await dialogFlowtter.detectIntent(
-          queryInput: QueryInput(text: TextInput(text: text)));
-      if (response.message == null) return;
-      setState(() {
-        addMessage(response.message!);
-      });
-    }
-  }
-
-  addMessage(Message message, [bool isUserMessage = false]) {
-    messages.add({
-      'message': message,
-      'isUserMessage': isUserMessage,
-    });
   }
 }
