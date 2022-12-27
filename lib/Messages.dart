@@ -9,7 +9,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-
 class CustomMessage extends StatelessWidget {
   final payload;
   CustomMessage({super.key, required this.payload});
@@ -95,17 +94,71 @@ class CustomMessage extends StatelessWidget {
                         )
                       : Container(
                           child: Column(children: [
-                          Text(" Some suggestions are"),
-                          RichText(
-                              text: TextSpan(children: [
-                            TextSpan(
-                                style: TextStyle(color: Colors.blue),
-                                text: " google? ",
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    controller.sendMessage("google?");
-                                  }),
-                          ])),
+                          Text(" Some suggestions are "),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                    style: TextStyle(color: Colors.blue),
+                                    text: " google? ",
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        controller.sendMessage("google?");
+                                      }),
+                              ])),
+                              SizedBox(
+                                width: 30,
+                              ),
+                              RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                    style: TextStyle(color: Colors.blue),
+                                    text: " who built you ",
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        controller.sendMessage("who built you");
+                                      }),
+                              ])),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      style: TextStyle(color: Colors.blue),
+                                      text: " How is Aarush Acharya? ",
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          controller.sendMessage(
+                                              "How is Aarush Acharya?");
+                                        }),
+                                ])),
+                                SizedBox(
+                                  width: 30,
+                                ),
+                                //is Aarush Acharya a Student
+                                RichText(
+                                    text: TextSpan(children: [
+                                  TextSpan(
+                                      style: TextStyle(color: Colors.blue),
+                                      text: " is Aarush Acharya a Student? ",
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () {
+                                          controller.sendMessage(
+                                              "is Aarush Acharya a Student");
+                                        }),
+                                ])),
+                              ])
                         ])),
     );
   }
@@ -132,8 +185,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
-    return 
-        Obx(() => ListView.separated(
+    return Obx(() => ListView.separated(
         itemBuilder: (context, index) {
           return Container(
             // alignment: isCustomMessage(index)
@@ -152,10 +204,14 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           bottomLeft: Radius.circular(20),
                           topRight: Radius.circular(20),
                           bottomRight: Radius.circular(
-                            controller.messages[index]['isUserMessage'] ? 0 : 20,
+                            controller.messages[index]['isUserMessage']
+                                ? 0
+                                : 20,
                           ),
                           topLeft: Radius.circular(
-                            controller.messages[index]['isUserMessage'] ? 20 : 0,
+                            controller.messages[index]['isUserMessage']
+                                ? 20
+                                : 0,
                           ),
                         ),
                         color: controller.messages[index]['isUser'] != null &&
@@ -165,7 +221,8 @@ class _MessagesScreenState extends State<MessagesScreen> {
                     constraints: BoxConstraints(maxWidth: w * 2 / 3),
                     child: isCustomMessage(index)
                         ? CustomMessage(
-                            payload: controller.messages[index]['message'].payload)
+                            payload:
+                                controller.messages[index]['message'].payload)
                         : Text(
                             getNormalMessage(index),
                             style: TextStyle(color: Colors.white),
@@ -175,7 +232,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
           );
         },
         separatorBuilder: (_, i) => Padding(padding: EdgeInsets.only(top: 10)),
-        itemCount: controller.messages.length)
-        );
+        itemCount: controller.messages.length));
   }
 }
